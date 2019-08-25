@@ -1,4 +1,5 @@
 # https://www.acmicpc.net/problem/2468
+# 128736kb | 636ms
 
 """
 N * N 이차원배열,
@@ -27,7 +28,7 @@ def checkWall(x, y, di):
 
 
 def safeUpdate(x, y, k):
-    if board[x][y] < k:
+    if board[x][y] >= k:
         safe[x][y] = 1
 
 
@@ -41,12 +42,14 @@ def bfs(x, y):
 
     while queue:
         xi, yi = queue[0][0], queue[0][1]
+        print(xi, yi, queue)
         del queue[0]
         for n in range(4):
             if checkWall(xi, yi, n):
                 nx, ny = xi + direction[n][0], yi + direction[n][1]
                 if board[nx][ny] and not visited[nx][ny] and safe[nx][ny]:
                     queue.append((nx, ny))
+                    visited[nx][ny] = 1
 
         visited[xi][yi] = 1
 
@@ -70,19 +73,29 @@ safe = [[0 for _ in range(N+2)] for __ in range(N+2)]
 
 max_result = 0
 
-for k in range(max_height, 0, -1):
+visited = [[0 for _ in range(N+2)] for __ in range(N+2)]
 
+# bfs(3,3)
+
+for k in range(max_height, 0, -1):
+    print(k)
     visited = [[0 for _ in range(N+2)] for __ in range(N+2)]
     result = 0
 
     for i in range(1, N+1):
         for j in range(1, N+1):
             safeUpdate(i, j, k)
-            if board[i][j] and not visited[i][j]:
-                result += bfs(i, j)
+
+    for i in range(1, N+1):
+        for j in range(1, N+1):
+            if safe[i][j] and not visited[i][j]:
+                print('start', i, j)
+                res= bfs(i, j)
+                result += res
+                print('result', result, res)
 
     if result > max_result:
-        result = max_result
+        max_result = result
 
 print(max_result)
 
