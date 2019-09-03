@@ -3,7 +3,7 @@ t = [3,5,1,1,2,4,2]
 p = [10,20,10,20,15,40,200]
 case = [1,2,3]
 """
-
+"""
 N = int(input())
 t, p = [], []
 
@@ -17,8 +17,6 @@ max_case = []
 
 enum=0
 power = []
-# make case with dfs(recursive)
-visited = [0 for _ in range(N)]
 
 # make case with binary
 power = []
@@ -54,3 +52,72 @@ for case in power:
         continue
 
 print(max_res)
+"""
+# -------------------------- #
+
+# review
+# dfs with c
+
+def solve(k):
+    global ans
+    if k == N:
+        for i in range(N):
+            if Si[i]:
+                for j in range(i + 1, i + Ti[i]):
+                    if j >= N or Si[j] : return
+
+        tsum = 0
+        for i in range(N):
+            if Si[i]:
+                tsum += Pi[i]
+        if tsum > ans : ans = tsum
+
+    else:
+        Si[k] = 1
+        solve(k + 1)
+        Si[k] = 0
+        solve(k + 1)
+
+N = int(input())
+
+Ti = [0] * N 
+Pi = [0] * N
+Si = [0] * N
+
+for i in range(N):
+    Ti[i], Pi[i] = map(int, input().split())
+
+ans = 0
+solve(0)
+
+print(ans)
+
+
+
+
+
+
+
+# def solve(k, s):
+#     global ans
+#     if k == N:
+#         ans = max(ans, s)
+#         return
+
+#     if(k + Ti[k] <= N):
+#         solve(k + Ti[k], s + Pi[k])
+
+#     solve(k + 1, s)
+
+# N = int(input())
+
+# Ti = [0] * N
+# Pi = [0] * N
+
+# for i in range(N):
+#     Ti[i], Pi[i] = map(int, input().split())
+
+# ans = 0
+# solve(0, 0)
+
+# print(ans)
